@@ -18,6 +18,8 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+        implementation 'org.dom4j:dom4j:2.0.2'
+        implementation 'commons-io:commons-io:2.5'
 }
 
 test {
