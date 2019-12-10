@@ -3,7 +3,6 @@ package com.kxtract.podengine;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -43,9 +42,11 @@ public class PodcastTest {
 		       System.out.println("Podcast (" + podcast.getTitle() + ") has (" + podcast.getEpisodes().size() + ") episodes");
 		       Episode lastEpisode = episodes.get(0);
 		       System.out.println("Last Episode is named (" + lastEpisode.getTitle() + ") Published on (" + lastEpisode.getPubDate() +")");
-		       System.out.println(lastEpisode.getSourceURL() + " // " + lastEpisode.getLink());
+		      
+		       
+		       URL downloadURL = lastEpisode.getEnclosure().getURL();
+		       System.out.println("Enclosure URL = " + downloadURL);
 		    }
-		    // line is not visible here.
 		}
 	}
 }
