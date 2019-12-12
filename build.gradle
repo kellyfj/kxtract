@@ -37,17 +37,27 @@ test {
 		events "passed", "skipped", "failed"
     	}
 }
+// to run coverage verification during the build (and fail when appropriate)
+check.dependsOn jacocoTestCoverageVerification
 
-//Ensure we run the tests if calling this task
 jacocoTestReport {
+	//Ensure we run the tests if calling this task
 	dependsOn test
 }
 jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.5
-            }
-        }
-    }
+	//Ensure we run the tests if calling this task
+    	dependsOn test
+        getSourceDirectories().setFrom(sourceSets.main.java.srcDirs)
+
+        getExecutionData().setFrom(fileTree(dir: "${buildDir}/jacoco", include:["**/*.exec"]))
+	violationRules {
+		rule {
+		    enabled = true
+		    limit {
+			counter = 'INSTRUCTION'
+			value = 'COVEREDRATIO'
+			minimum = 0.1
+		    }
+		}
+	}
 }

@@ -19,6 +19,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Attribution to https://github.com/MarkusLewis/Podcast-Feed-Library
+ *
+ */
 public class Podcast {
 
     private String xmlData;
@@ -74,6 +78,9 @@ public class Podcast {
     }
 
     public Podcast(String xml) throws MalformedFeedException {
+    	if(xml == null) {
+    		throw new IllegalArgumentException("Argument cannot be null");
+    	}
         try {
             this.xmlData = xml;
             this.document = DocumentHelper.parseText(this.xmlData);
