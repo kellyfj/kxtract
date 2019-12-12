@@ -1,9 +1,21 @@
 package com.kxtract.podengine.models;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.kxtract.podengine.exceptions.DateFormatException;
 import com.kxtract.podengine.exceptions.MalformedFeedException;
 
 public class PodcastTest {
@@ -31,10 +43,95 @@ public class PodcastTest {
 	}
 	
 	@Test
-	public void testCtor_SampleXML_Complex() throws MalformedFeedException {
+	public void testCtor_SampleXML_Complex() throws MalformedFeedException, MalformedURLException, DateFormatException {
 		Podcast p = new Podcast(EXAMPLE_RSS_XML_COMPLEX);
+		String[] categories = p.getCategories();
+		assertNotNull(categories);
+		assertEquals(1, categories.length);
+		
+		CloudInfo c = p.getCloud();
+		assertNull(c);
+		
+		String copyright = p.getCopyright();
+		assertNotNull(copyright);
+		
+		String description = p.getDescription();
+		assertNotNull(description);
+		
+		URL d = p.getDocs();
+		assertNotNull(d);
+		
+		String docsString = p.getDocsString();
+		assertNotNull(docsString);
+		
+		List<Episode> episodes = p.getEpisodes();
+		assertNotNull(episodes);
+		assertEquals(9, episodes.size());
+		
+		URL feedURL = p.getFeedURL();
+		assertNull(feedURL);
+		
+		String generator = p.getGenerator();
+		assertNotNull(generator);
+		
+		URL imageURL = p.getImageURL();
+		assertNotNull(imageURL);
+		
+		ITunesChannelInfo itunes = p.getITunesInfo();
+		assertNotNull(itunes);
+		
+		String[] keywords = p.getKeywords();
+		assertNotNull(keywords);
+		assertTrue(keywords.length == 0);
+		
+		String language = p.getLanguage();
+		assertNotNull(language);
+		
+		Date lastBuildDate = p.getLastBuildDate();
+		assertNotNull(lastBuildDate);
+		
+		String lastBuildDateString = p.getLastBuildDateString();
+		assertNotNull(lastBuildDateString);
+		
+		URL link = p.getLink();
+		assertNotNull(link);
+		
+		String managingEditor = p.getManagingEditor();
+		assertNotNull(managingEditor);
+		
+		String PICSrating = p.getPICSRating();
+		assertNull(PICSrating);
+		
+		Date pubDate = p.getPubDate();
+		assertNotNull(pubDate);
+		
+		String pubDateString = p.getPubDateString();
+		assertNotNull(pubDateString);
+		
+		Set<String> s=  p.getSkipDays();
+		assertNull(s);
+		
+		Set<Integer> skipHours = p.getSkipHours();
+		assertNull(skipHours);
+		
+		TextInputInfo t = p.getTextInput();
+		assertNull(t);
+		
+		String title = p.getTitle();
+		assertNotNull(title);
+		
+		Integer ttl = p.getTTL();
+		assertNull(ttl);
+		
+		String webmaster = p.getWebMaster();
+		assertNotNull(webmaster);
+		
+		String xml = p.getXMLData();
+		assertNotNull(xml);
+		assertEquals(EXAMPLE_RSS_XML_COMPLEX, xml);
 	}
 	
+	//Sample XML from https://www.w3schools.com/xml/xml_rss.asp
 	private static final String EXAMPLE_RSS_XML_SIMPLE = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" + 
 			"<rss version=\"2.0\">\n" + 
 			"\n" + 
@@ -56,7 +153,7 @@ public class PodcastTest {
 			"\n" + 
 			"</rss>";
 	
-	
+	//Sample XML from here https://www.feedforall.com/sample.xml with a few tweaks for XML correctness (around font/<i> tag order)
 	private static final String EXAMPLE_RSS_XML_COMPLEX = "<rss version=\"2.0\">\n" + 
 			"<channel>\n" + 
 			"<title>FeedForAll Sample Feed</title>\n" + 

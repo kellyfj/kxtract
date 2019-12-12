@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.podengine.models.Podcast;
 
-public class PodcastTest {
+public class PodcastIntegrationTest {
 
 	
 	@Test
