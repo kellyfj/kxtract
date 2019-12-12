@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
         id 'eclipse'
+        id 'jacoco'
 }
 
 group = 'com.kxtract'
@@ -37,3 +38,16 @@ test {
     	}
 }
 
+//Ensure we run the tests if calling this task
+jacocoTestReport {
+	dependsOn test
+}
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+    }
+}
