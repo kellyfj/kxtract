@@ -11,40 +11,30 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Random;
-
-//import software.amazon.awssdk.regions.Region;
-//import software.amazon.awssdk.services.s3.*;
-//import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.*;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.podengine.models.Podcast;
+import com.kxtract.s3.S3Uploader;
 
 public class DownloaderMain {
 
 	public static void main(String[] args) {
 		new DownloaderMain();
 	}
-
 	
 	public DownloaderMain() {
 		InputStream stream = this.getClass().getResourceAsStream("/podcasts.txt");
-
+		int numberOfPodcastsChecked = 0;
+		int numberOfEpisodesDownloaded = 0;
+		
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
 			for (String line; (line = br.readLine()) != null;) {
 				Podcast podcast = new Podcast(new URL(line));
+				numberOfPodcastsChecked++;
+				
 				List<Episode> episodes = podcast.getEpisodes();
 				System.out.println("Podcast (" + podcast.getTitle() + ")");
 				System.out.println("\t Has (" + podcast.getEpisodes().size() + ") episodes");
@@ -66,41 +56,26 @@ public class DownloaderMain {
 				} else {
 					System.out.println("Creating file " + f.getAbsolutePath() + " . . . .");
 					FileUtils.copyURLToFile(downloadURL, f);
+					numberOfEpisodesDownloaded++;
 					System.out.println("File download Completed!");
 				}
 				
 				String bucketName = "kxtract";
 				System.out.println("Checking S3 before upload . . . .");
-				if(fileAlreadyExistsInS3(bucketName, filename)) {
+				if(S3Uploader.fileAlreadyExistsInS3(bucketName, filename)) {
 					System.out.println("File already exists in S3 . . .");
 				} else {
 					System.out.println("Uploading to S3 . . . ");
-					uploadFileToS3(bucketName, f);
+					S3Uploader.uploadFileToS3(bucketName, f);
 					System.out.println("Upload to S3 Completed!");
 				}
 			}
+			
+			System.out.println("Checked (" + numberOfPodcastsChecked + ") podcasts.");
+			System.out.println("Downloaded (" + numberOfEpisodesDownloaded + ") episodes");
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public static boolean fileAlreadyExistsInS3(String bucketName, String fileName) {
-        AmazonS3 s3 =  AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();      
-        try {
-            boolean exists = s3.doesObjectExist(bucketName, fileName);
-            return exists;      
-        } catch (Exception e) {
-        	throw new RuntimeException(e);
-        }
-    }
-	
-	public static void uploadFileToS3(String bucketName, File f) {
-		AmazonS3 s3 =  AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();   
-		String key = f.getName();
-		PutObjectRequest p = new PutObjectRequest(bucketName, f.getName(), f);
-		
-		// Put Object
-		s3.putObject(p);
 	}
 	
 	public static long daysDifferent(Date d1, Date d2) {

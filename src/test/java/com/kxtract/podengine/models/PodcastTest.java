@@ -24,22 +24,22 @@ public class PodcastTest {
 	public void testCtor_nullXML() throws MalformedFeedException {
 		String xml = null;
 		
-		Throwable exception = assertThrows(IllegalArgumentException.class,
-	            ()->{Podcast p = new Podcast(xml);} );
+		assertThrows(IllegalArgumentException.class,
+	            ()->{new Podcast(xml);} );
 	}
 	
 	@Test
 	public void testCtor_blankStringXML() throws MalformedFeedException {
 		String xml = "";
 		
-		Throwable exception = assertThrows(MalformedFeedException.class,
-	            ()->{Podcast p = new Podcast(xml);} );
+		assertThrows(MalformedFeedException.class,
+	            ()->{new Podcast(xml);} );
 	}
 
 	
 	@Test
 	public void testCtor_SampleXML() throws MalformedFeedException {
-		Podcast p = new Podcast(EXAMPLE_RSS_XML_SIMPLE);
+		new Podcast(EXAMPLE_RSS_XML_SIMPLE);
 	}
 	
 	@Test
