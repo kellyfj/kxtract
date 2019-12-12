@@ -5,7 +5,6 @@ import java.io.File;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 public class S3Uploader {
@@ -48,7 +47,6 @@ public class S3Uploader {
 				throw new IllegalArgumentException(
 						"That file (" + fileName + ") does not exist in S3 bucket (" + bucketName + ")");
 			}
-			DeleteObjectRequest d = new DeleteObjectRequest(bucketName, fileName);
 			s3.deleteObject(bucketName, fileName);
         } catch (Exception e) {
         	throw new RuntimeException(e);
