@@ -45,10 +45,10 @@ public class TranscriberIntegrationTest {
 	}
 	
 	@Test
-	public void testSimplifyJSON() throws URISyntaxException, JsonMappingException, JsonProcessingException {
+	public void testSimplifyJSON() throws URISyntaxException, IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File f = new File(classLoader.getResource("test_transcript.json").getFile());
-		Transcriber.simplifyTranscription(f.getAbsolutePath());
-		
+		StringBuilder sb = Transcriber.simplifyTranscription(f.getAbsolutePath());
+		Transcriber.writeStringToFile(sb, "/tmp/testSimplifyJSON_formatted.txt");
 	}
 }

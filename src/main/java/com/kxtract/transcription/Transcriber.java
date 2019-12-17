@@ -1,9 +1,15 @@
 package com.kxtract.transcription;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -80,12 +86,70 @@ public class Transcriber {
 		return null;
 	}
 	
-	public static void simplifyTranscription(String filePath) throws JsonMappingException, JsonProcessingException {
-		String rawJSON = readFileToString(filePath);
-		
-		logger.info(rawJSON);
+	/**
+	 * Logic built on https://github.com/trhr/aws-transcribe-transcript/blob/master/transcript.py
+	 */
+	public static StringBuilder simplifyTranscription(String filePath) throws IOException {
+		String rawJSON = readFileToString(filePath);		
+		logger.debug(rawJSON);
 		ObjectMapper objectMapper = new ObjectMapper();
-		Transcription t = objectMapper.readValue(rawJSON, Transcription.class);  
+		Transcription transcription = objectMapper.readValue(rawJSON, Transcription.class);
+		
+		List<Segment> segments = transcription.getResults().getSpeaker_labels().getSegments();
+		
+		Map<Double, String> speakerStartTimes = new HashMap<Double, String>();
+		for(Segment segment : segments) {
+			for(SegmentItems item : segment.getItems()) {
+					Double startTime = item.getStart_time();
+					String speakerLabel = item.getSpeaker_label();
+					speakerStartTimes.put(startTime, speakerLabel);
+			}
+		}
+		
+		List<Item> items = transcription.getResults().getItems();
+		StringBuilder line = new StringBuilder();
+		StringBuilder result = new StringBuilder();
+		Double time = 0.0;
+		String speaker = null;
+		for(Item item : items) {
+			String content = item.getAlternatives().get(0).getContent();
+			Double startTime = item.getStart_time();
+			
+			String currentSpeaker = null;
+			if(startTime != null) {
+				currentSpeaker = speakerStartTimes.get(startTime);
+			} else if("punctuation".equals(item.getType())) {
+				line.append(content);
+			}
+			
+			if(currentSpeaker!=null && !currentSpeaker.equals(speaker)) {
+				if(speaker != null) {
+					result.append("(" + time + ") speaker:" + speaker + " --> " + line + "\n");
+				}
+				
+				line = new StringBuilder(content);
+				speaker = currentSpeaker;
+				time = startTime;
+				
+			} else if (!"punctuation".equals(item.getType())) {
+				line.append(" ").append(content);
+			}	
+		}
+		result.append("(" + time + ") speaker:" + speaker + " --> " + line + "\n");
+		
+		return result;
+	}
+	
+	public static void writeStringToFile(StringBuilder sb, String filePath) throws IOException {
+		File file = new File(filePath);
+		BufferedWriter writer = null;
+		try {
+		    writer = new BufferedWriter(new FileWriter(file));
+		    writer.write(sb.toString());
+		    logger.info("Wrote output to " + filePath);
+		} finally {
+		    if (writer != null) writer.close();
+		}
 	}
 	
 	private static String readFileToString(String filePath) {
