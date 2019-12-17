@@ -1,5 +1,11 @@
 package com.kxtract.transcription;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +19,9 @@ import com.amazonaws.services.transcribe.model.Settings;
 import com.amazonaws.services.transcribe.model.StartTranscriptionJobRequest;
 import com.amazonaws.services.transcribe.model.TranscriptionJob;
 import com.amazonaws.services.transcribe.model.TranscriptionJobStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kxtract.s3.S3Uploader;
 
 public class Transcriber {
@@ -29,7 +38,7 @@ public class Transcriber {
 		request.setMedia(media);
 		request.withLanguageCode(LanguageCode.EnUS);
 		Settings settings = new Settings();
-		settings.setMaxSpeakerLabels(3);
+		settings.setMaxSpeakerLabels(3); //Without this we can't tell which speaker said what
 		settings.setShowSpeakerLabels(true);
 		request.setSettings(settings);
 		
@@ -69,5 +78,25 @@ public class Transcriber {
 			}
 		}
 		return null;
+	}
+	
+	public static void simplifyTranscription(String filePath) throws JsonMappingException, JsonProcessingException {
+		String rawJSON = readFileToString(filePath);
+		
+		logger.info(rawJSON);
+		ObjectMapper objectMapper = new ObjectMapper();
+		Transcription t = objectMapper.readValue(rawJSON, Transcription.class);  
+	}
+	
+	private static String readFileToString(String filePath) {
+		StringBuilder contentBuilder = new StringBuilder();
+
+		try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
+			stream.forEach(s -> contentBuilder.append(s).append("\n"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return contentBuilder.toString();
 	}
 }

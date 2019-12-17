@@ -3,6 +3,7 @@ package com.kxtract.transcription;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class TranscriberIntegrationTest {
 	private static Logger logger = LoggerFactory.getLogger(TranscriberIntegrationTest.class);
@@ -38,5 +42,13 @@ public class TranscriberIntegrationTest {
 		logger.info("Creating file " + targetFile.getAbsolutePath() + " . . . .");
 		FileUtils.copyURLToFile(new URL(fileURI), targetFile);
 		logger.info("File download Completed!");
+	}
+	
+	@Test
+	public void testSimplifyJSON() throws URISyntaxException, JsonMappingException, JsonProcessingException {
+		ClassLoader classLoader = getClass().getClassLoader();
+		File f = new File(classLoader.getResource("test_transcript.json").getFile());
+		Transcriber.simplifyTranscription(f.getAbsolutePath());
+		
 	}
 }
