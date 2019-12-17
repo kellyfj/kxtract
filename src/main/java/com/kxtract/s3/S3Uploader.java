@@ -35,6 +35,11 @@ public class S3Uploader {
 		// Put Object
 		s3.putObject(p);
 	}
+	
+	public static String getS3Filename(String bucketName, String filename) {
+		AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
+		return s3.getUrl(bucketName, filename).toString();
+	}
 
 	/**
 	 * For Testing only

@@ -1,4 +1,16 @@
 <configuration>
-    <logger name="org.apache" level="WARN" />
+    <logger name="com.xtract" level="INFO" />
     <logger name="httpclient" level="WARN" /> 
+ 
+    
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <pattern>%d %class.%method [%t] %msg%n</pattern>
+    </encoder>
+   </appender>
+    
+    <!-- LOG everything at INFO level -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
 </configuration>

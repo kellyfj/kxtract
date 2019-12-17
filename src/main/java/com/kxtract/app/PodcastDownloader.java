@@ -7,38 +7,41 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.podengine.models.Podcast;
 
 public class PodcastDownloader {
-
+	private static Logger logger = LoggerFactory.getLogger(PodcastDownloader.class);
+	
 	public static String downloadLatestEpisode(String podcastName, String downloadPathname, boolean downloadIfAlreadyExists) {
 		try {
 			Podcast podcast = new Podcast(new URL(podcastName));
 
 			List<Episode> episodes = podcast.getEpisodes();
-			System.out.println("Podcast (" + podcast.getTitle() + ")");
-			System.out.println("\t Has (" + podcast.getEpisodes().size() + ") episodes");
+			logger.info("Podcast (" + podcast.getTitle() + ")");
+			logger.info("\t Has (" + podcast.getEpisodes().size() + ") episodes");
 			Episode lastEpisode = episodes.get(0);
-			System.out.println("\t Last Episode is named (" + lastEpisode.getTitle() + ") ");
-			System.out.println("\t Published (" + daysDifferent(lastEpisode.getPubDate(), new Date()) + " days ago)");
+			logger.info("\t Last Episode is named (" + lastEpisode.getTitle() + ") ");
+			logger.info("\t Published (" + daysDifferent(lastEpisode.getPubDate(), new Date()) + " days ago)");
 
 			URL downloadURL = lastEpisode.getEnclosure().getURL();
-			System.out.println("\t Download URL = " + downloadURL);
+			logger.info("\t Download URL = " + downloadURL);
 
 			String[] segments = downloadURL.getPath().split("/");
 			String filename = segments[segments.length - 1];
 
-			System.out.println("\tfilename = " + filename);
+			logger.info("\tfilename = " + filename);
 			File f = new File(downloadPathname + filename);
 
 			if (f.exists() && !downloadIfAlreadyExists) {
-				System.out.println("File already exists locally . . . Skipping download");
+				logger.info("File already exists locally . . . Skipping download");
 			} else {
-				System.out.println("Creating file " + f.getAbsolutePath() + " . . . .");
+				logger.info("Creating file " + f.getAbsolutePath() + " . . . .");
 				FileUtils.copyURLToFile(downloadURL, f);
-				System.out.println("File download Completed!");
+				logger.info("File download Completed!");
 			}
 
 			return filename;
