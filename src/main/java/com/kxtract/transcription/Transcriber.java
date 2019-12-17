@@ -25,8 +25,6 @@ import com.amazonaws.services.transcribe.model.Settings;
 import com.amazonaws.services.transcribe.model.StartTranscriptionJobRequest;
 import com.amazonaws.services.transcribe.model.TranscriptionJob;
 import com.amazonaws.services.transcribe.model.TranscriptionJobStatus;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kxtract.s3.S3Uploader;
 
@@ -51,7 +49,13 @@ public class Transcriber {
 		String transcriptionJobName = "myJob-" + fileName + "-" + System.currentTimeMillis(); // consider a unique name
 																								// as an id.
 		request.setTranscriptionJobName(transcriptionJobName);
-		request.withMediaFormat(MediaFormat.Mp3);
+		if (fileName.endsWith(".mp3")) {
+			request.withMediaFormat(MediaFormat.Mp3);
+		} else if (fileName.endsWith(".m4a")) {
+			request.withMediaFormat(MediaFormat.Mp4);
+		} else
+			throw new IllegalArgumentException("File Type unknown based on Filename ( " + fileName + ")");
+		
 		client.startTranscriptionJob(request);
 		return transcriptionJobName;
 	}
@@ -94,6 +98,7 @@ public class Transcriber {
 		logger.debug(rawJSON);
 		ObjectMapper objectMapper = new ObjectMapper();
 		Transcription transcription = objectMapper.readValue(rawJSON, Transcription.class);
+		logger.info("Read and parsed JSON output");
 		
 		List<Segment> segments = transcription.getResults().getSpeaker_labels().getSegments();
 		
@@ -142,6 +147,8 @@ public class Transcriber {
 	
 	public static void writeStringToFile(StringBuilder sb, String filePath) throws IOException {
 		File file = new File(filePath);
+		//Create directories above if they do not exist
+		file.getParentFile().mkdirs();
 		BufferedWriter writer = null;
 		try {
 		    writer = new BufferedWriter(new FileWriter(file));

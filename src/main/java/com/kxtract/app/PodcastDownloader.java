@@ -41,7 +41,7 @@ public class PodcastDownloader {
 			} else {
 				logger.info("Creating file " + f.getAbsolutePath() + " . . . .");
 				FileUtils.copyURLToFile(downloadURL, f);
-				logger.info("File download Completed!");
+				logger.info("File download Completed! File size is " + f.length()/1024 + "kb");
 			}
 
 			return filename;
