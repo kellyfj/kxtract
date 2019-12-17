@@ -9,12 +9,15 @@ import java.net.URL;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.podengine.models.Podcast;
 
 public class PodcastIntegrationTest {
-
+	private static Logger logger = LoggerFactory.getLogger(PodcastIntegrationTest.class);
+	
 	
 	@Test
 	public void testReadPodcastEpisodes() throws Exception {
@@ -39,13 +42,13 @@ public class PodcastIntegrationTest {
 		    for(String line; (line = br.readLine()) != null; ) {
 		       Podcast podcast = new Podcast(new URL(line));
 		       List<Episode> episodes = podcast.getEpisodes();
-		       System.out.println("Podcast (" + podcast.getTitle() + ") has (" + podcast.getEpisodes().size() + ") episodes");
+		       logger.info("Podcast (" + podcast.getTitle() + ") has (" + podcast.getEpisodes().size() + ") episodes");
 		       Episode lastEpisode = episodes.get(0);
-		       System.out.println("Last Episode is named (" + lastEpisode.getTitle() + ") Published on (" + lastEpisode.getPubDate() +")");
+		      logger.info("Last Episode is named (" + lastEpisode.getTitle() + ") Published on (" + lastEpisode.getPubDate() +")");
 		      
 		       
 		       URL downloadURL = lastEpisode.getEnclosure().getURL();
-		       System.out.println("Enclosure URL = " + downloadURL);
+		       logger.info("Enclosure URL = " + downloadURL);
 		    }
 		}
 	}
