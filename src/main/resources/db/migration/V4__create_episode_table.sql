@@ -1,4 +1,4 @@
-CREATE TABLE episodes (
+CREATE TABLE episode (
     id INT NOT NULL AUTO_INCREMENT,
     podcast_id INT NOT NULL,
     episode_id INT, 
