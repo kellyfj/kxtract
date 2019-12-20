@@ -27,4 +27,5 @@ Setup the database
 Print the details and statis information
 ./gradlew flywayInfo
 
-
+Delete the database contents so we can start-over
+ ./gradlew flywayClean
