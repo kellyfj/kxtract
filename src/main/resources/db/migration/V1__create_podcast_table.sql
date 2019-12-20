@@ -1,5 +1,6 @@
-create table podcast (
-    id int primary key,
-    name varchar(256) not null,
-    rss_url varchar(1024) not null
+CREATE TABLE podcast (
+    id int NOT NULL AUTO_INCREMENT,
+    name VARCHAR(256) NOT NULL,
+    rss_url VARCHAR(1024) NOT NULL,
+    PRIMARY KEY (id)
 );

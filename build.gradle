@@ -32,7 +32,8 @@ dependencies {
 	implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 	implementation 'com.amazonaws:aws-java-sdk-transcribe:1.11.691'
-	runtimeOnly 'com.h2database:h2'
+	testImplementation 'com.h2database:h2'
+        runtimeOnly 'mysql:mysql-connector-java'
 
         // JAX-B dependencies for JDK 9+
         implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"

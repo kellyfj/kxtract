@@ -9,15 +9,14 @@ import javax.persistence.Id;
 public class Podcast {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY) 
-  private Integer id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
   private String name;
   private String rss_url;
 
   protected Podcast() {}
 
-  public Podcast(Integer id, String name, String rss_url) {
-	  this.id = id;
+  public Podcast(String name, String rss_url) {
 	  this.name = name;
 	  this.rss_url = rss_url;	  
   }
@@ -29,7 +28,7 @@ public class Podcast {
         id, name, rss_url);
   }
 
-  public Integer getId() {
+  public int getId() {
     return id;
   }
 
