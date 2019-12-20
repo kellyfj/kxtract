@@ -1,9 +1,16 @@
+buildscript {
+    dependencies {
+        classpath 'org.mariadb.jdbc:mariadb-java-client:2.4.0'
+    }
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.2.2.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
         id 'eclipse'
         id 'jacoco'
+        id "org.flywaydb.flyway" version "6.1.2"
 }
 
 group = 'com.kxtract'
@@ -59,4 +66,10 @@ jacocoTestCoverageVerification {
 		    }
 		}
 	}
+}
+
+
+flyway {
+//all properties e.g. url, login, password in gradle.properties
+// See https://flywaydb.org/documentation/gradle/#tasks for more details
 }

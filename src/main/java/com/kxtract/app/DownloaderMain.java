@@ -54,12 +54,11 @@ public class DownloaderMain {
 					StringBuilder sb = Transcriber.simplifyTranscription(targetFile.getAbsolutePath());
 					Transcriber.writeStringToFile(sb, "/tmp/postprocessing/text_transcript_"+filePathParts[0]+"_simplified.txt");
 				}
-								
 			}
 			
 			logger.info("Checked (" + numberOfPodcastsChecked + ") podcasts.");
 			logger.info("Uploaded (" + numberOfNewEpisodesUploaded + ") new episodes");
-			
+			logger.info("DONE!");
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}

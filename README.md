@@ -20,3 +20,11 @@ Download Podcasts, transcribe them to text, summarize them, store them and email
 `$ ./gradlew jacocoTestCoverageVerification`
 
 
+### Database 
+Setup the database
+./gradlew flywayMigrate -i 
+
+Print the details and statis information
+./gradlew flywayInfo
+
+
