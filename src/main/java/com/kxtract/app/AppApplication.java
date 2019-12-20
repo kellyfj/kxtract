@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.kxtract.data.EpisodeRepository;
@@ -19,6 +20,7 @@ import com.kxtract.data.dao.Podcast;
 import com.kxtract.data.dao.Subscription;
 
 @SpringBootApplication
+@ComponentScan(basePackages = { "com.kxtract" })
 @EnableJpaRepositories(basePackages = { "com.kxtract.data" })
 @EntityScan("com.kxtract.data.dao*")
 public class AppApplication {

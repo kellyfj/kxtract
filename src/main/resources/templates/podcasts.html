@@ -1,0 +1,30 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>Podcasts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+
+  <body>
+
+    <h1>Podcast List</h1>
+  
+    <table border=1>
+      <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>RSS</th>
+      </tr>
+      <tr th:each="podcast : ${list}">
+         <td th:text="${podcast.id}"></td>
+         <td th:text="${podcast.name}">"</td>
+         <td th:text="${podcast.rssURL}">"</td>
+      </tr>
+    </table>
+  
+  </body>
+
+</html>
