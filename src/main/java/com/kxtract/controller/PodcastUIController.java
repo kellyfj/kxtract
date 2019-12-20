@@ -16,6 +16,11 @@ public class PodcastUIController {
 	@Autowired
 	private PodcastRepository podRepo;
 	
+	@GetMapping("/")
+	public String index(Model model) {
+		return "index";
+	}
+	
 	@GetMapping("/ui/podcasts")
 	public String viewpodcasts(Model model) {
 		
