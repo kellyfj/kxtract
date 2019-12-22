@@ -20,12 +20,12 @@ Download Podcasts, transcribe them to text, summarize them, store them and email
 `$ ./gradlew jacocoTestCoverageVerification`
 
 
-### Database 
+### Relational Database Maintenance
 Setup the database
-./gradlew flywayMigrate -i 
+`./gradlew flywayMigrate -i`
 
 Print the details and statis information
-./gradlew flywayInfo
+`./gradlew flywayInfo`
 
 Delete the database contents so we can start-over
- ./gradlew flywayClean
+` ./gradlew flywayClean`
