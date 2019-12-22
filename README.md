@@ -1,10 +1,11 @@
 # kxtract
 
-Download Podcasts, transcribe them to text, summarize them, store them and email them.
+Download Podcasts, transcribe them to text, summarize them, store them in a database and then email them.
 
 ## Dependencies
 - Java 1.8+
 - AWS Credentials 
+- MariaDB Relational database
 
 ## Common Commands
 
