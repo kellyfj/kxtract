@@ -1,0 +1,28 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>Episodes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+
+  <body>
+
+    <h1>Episode List for Podcast: <span th:text="${podcastId}">TBD</span></h1>
+  
+    <table border=1>
+      <tr>
+        <th>Episode Id</th>
+        <th>Episode Name</th>
+      </tr>
+      <tr th:each="episode : ${episodeList}">
+         <td th:text="${episode.episodeId}"></td>
+         <td th:text="${episode.episodeName}">"</td>
+      </tr>
+    </table>
+  
+  </body>
+
+</html>
