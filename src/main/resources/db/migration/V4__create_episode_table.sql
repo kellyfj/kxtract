@@ -3,7 +3,9 @@ CREATE TABLE episode (
     podcast_id INT NOT NULL,
     episode_id INT, 
     episode_name VARCHAR(128) NOT NULL,
+    filesize_kb INT,
     PRIMARY KEY (id),
-    FOREIGN KEY (podcast_id) REFERENCES podcast(id)
+    FOREIGN KEY (podcast_id) REFERENCES podcast(id),
+    CONSTRAINT episode_name_unique UNIQUE(podcast_id, episode_name)
 );
 

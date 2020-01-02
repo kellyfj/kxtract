@@ -4,6 +4,8 @@ import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kxtract.podengine.exceptions.DateFormatException;
 import com.kxtract.podengine.exceptions.MalformedFeedException;
@@ -14,7 +16,8 @@ import java.net.URL;
 import java.util.*;
 
 public class Episode {
-
+	private Logger logger = LoggerFactory.getLogger(Episode.class);
+	
     public static class Enclosure {
 
         private URL url;
@@ -92,27 +95,27 @@ public class Episode {
     }
 
     //Required Tags
-    public String getTitle() throws MalformedFeedException {
+    public String getTitle() {
         if (this.title != null) {
             return this.title;
         }
 
         Element titleElement = this.itemElement.element("title");
         if (titleElement == null) {
-            throw new MalformedFeedException("Item is missing required element title.");
+            throw new RuntimeException("Item is missing required element title.");
         }
 
         return this.title = titleElement.getText();
     }
 
-    public String getDescription() throws MalformedFeedException {
+    public String getDescription() {
         if (this.description != null) {
             return this.description;
         }
 
         Element descriptionElement = this.itemElement.element("description");
         if (descriptionElement == null) {
-            throw new MalformedFeedException("Item is missing required element description.");
+            throw new RuntimeException("Item is missing required element description.");
         }
 
         return this.description = descriptionElement.getText();
@@ -267,5 +270,31 @@ public class Episode {
         }
 
         return this.contentEncoded = contentEncodedElement.getText();
+    }
+    
+    public String getFilename() {
+		URL downloadURL;
+		try {
+			downloadURL = this.getEnclosure().getURL();
+			logger.info("\t Download URL = " + downloadURL);
+
+			String[] segments = downloadURL.getPath().split("/");
+			String filename = segments[segments.length - 1];
+
+			logger.info("\tfilename = " + filename);
+			
+			return filename;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+    }
+    private long fileSizeInKB;
+    
+    public void setFileSizeInKB(long fileSizeInKB) {
+    	this.fileSizeInKB = fileSizeInKB;
+    }
+    
+    public long getFileSizeInKB() {
+    	return this.fileSizeInKB;
     }
 }

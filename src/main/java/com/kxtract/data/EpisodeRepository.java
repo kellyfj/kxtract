@@ -9,4 +9,6 @@ public interface EpisodeRepository extends CrudRepository<Episode, Integer>{
 	  List<Episode> findByPodcastId(int podcastId);
 
 	  Episode findById(int id);
+	  
+	  Episode findByPodcastIdAndEpisodeName(int podcastId, String name);
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Refresh Status</title>
+</head>
+<body>
+
+<h1>Refresh</h1>
+Downloaded <span th:text="${#lists.size(episodeDownloads)}">episodeListSize</span> episodes
+
+<h2>Episodes Downloaded </h2>
+  
+    <table border=1>
+      <tr>
+        <th>Podcast Id</th>
+        <th>Episode Id</th>
+        <th>Episode Name</th>
+      </tr>
+      <tr th:each="episode : ${episodeDownloads}">
+      	 <td th:text="${episode.podcastId}">podcastId</td>
+         <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
+         <td th:text="${episode.episodeName}">episodeName</td>
+      </tr>
+    </table>
+
+</body>
+</html>

@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kxtract.podengine.models.Episode;
 import com.kxtract.s3.S3Uploader;
 import com.kxtract.transcription.Transcriber;
 
@@ -29,7 +30,8 @@ public class DownloaderMain {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
 			for (String rss; (rss = br.readLine()) != null;) {
 
-				String episodeFilename = PodcastDownloader.downloadLatestEpisode(rss, DOWNLOAD_PATH, false);
+				Episode episode = PodcastDownloader.downloadLatestEpisode(rss, DOWNLOAD_PATH, false);
+				String episodeFilename = episode.getFilename();
 				numberOfPodcastsChecked++;
 				String bucketName = "kxtract";
 				logger.info("Checking S3 before upload . . . .");

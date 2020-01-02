@@ -18,8 +18,8 @@
         <th>Episode Name</th>
       </tr>
       <tr th:each="episode : ${episodeList}">
-         <td th:text="${episode.episodeId}"></td>
-         <td th:text="${episode.episodeName}">"</td>
+         <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
+         <td th:text="${episode.episodeName}">episodeName</td>
       </tr>
     </table>
   

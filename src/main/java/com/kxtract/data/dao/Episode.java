@@ -11,15 +11,18 @@ public class Episode {
 	  @Id
 	  @GeneratedValue(strategy = GenerationType.IDENTITY)
 	  private int id;
-	  private int episodeId;
+	  private Integer episodeId;
 	  private int podcastId;
 	  private String episodeName;
+	  private long filesize_KB;
 	  
 	  protected Episode() {}
 
-	  public Episode(int episodeId, int podcastId, String episodeName) {
+	  public Episode(int podcastId, String episodeName, Integer episodeId, Long fileSizeInKB) {
+		  this.podcastId = podcastId;
 		  this.episodeId = episodeId;
-		  this.podcastId = podcastId;	  
+		  this.episodeName = episodeName;
+		  this.filesize_KB = fileSizeInKB;
 	  }
 	  
 	  @Override
@@ -29,19 +32,24 @@ public class Episode {
 	        id, episodeId, podcastId, episodeName);
 	  }
 
-	  public int getId() {
-	    return id;
-	  }
+	public int getId() {
+		return id;
+	}
 
-	  public int getEpisodeId() {
-	    return episodeId;
-	  }
-	  
-	  public int getPodcastId() {
-		  return podcastId;
-	  } 
-	  
-	  public String getEpisodeName() {
-		  return episodeName;
-	  }
+	public Integer getEpisodeId() {
+		return episodeId;
+	}
+
+	public int getPodcastId() {
+		return podcastId;
+	}
+
+	public String getEpisodeName() {
+		return episodeName;
+	}
+
+	public long getFilesizeKB() {
+		return filesize_KB;
+	}
+
 }

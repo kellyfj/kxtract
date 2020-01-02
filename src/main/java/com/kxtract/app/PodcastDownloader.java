@@ -16,7 +16,7 @@ import com.kxtract.podengine.models.Podcast;
 public class PodcastDownloader {
 	private static Logger logger = LoggerFactory.getLogger(PodcastDownloader.class);
 	
-	public static String downloadLatestEpisode(String podcastName, String downloadPathname, boolean downloadIfAlreadyExists) {
+	public static Episode downloadLatestEpisode(String podcastName, String downloadPathname, boolean downloadIfAlreadyExists) {
 		try {
 			Podcast podcast = new Podcast(new URL(podcastName));
 
@@ -29,22 +29,25 @@ public class PodcastDownloader {
 
 			URL downloadURL = lastEpisode.getEnclosure().getURL();
 			logger.info("\t Download URL = " + downloadURL);
-
+			
+			/*
 			String[] segments = downloadURL.getPath().split("/");
 			String filename = segments[segments.length - 1];
 
-			logger.info("\tfilename = " + filename);
+			logger.info("\tfilename = " + filename);*/
+			String filename = lastEpisode.getFilename();
 			File f = new File(downloadPathname + filename);
 
 			if (f.exists() && !downloadIfAlreadyExists) {
 				logger.info("File already exists locally . . . Skipping download");
+				return null;
 			} else {
 				logger.info("Creating file " + f.getAbsolutePath() + " . . . .");
 				FileUtils.copyURLToFile(downloadURL, f);
 				logger.info("File download Completed! File size is " + f.length()/1024 + "kb");
+				lastEpisode.setFileSizeInKB(f.length()/1024);
+				return lastEpisode;
 			}
-
-			return filename;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
