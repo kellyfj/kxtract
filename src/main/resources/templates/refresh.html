@@ -7,20 +7,40 @@
 <body>
 
 <h1>Refresh</h1>
-Downloaded <span th:text="${#lists.size(episodeDownloads)}">episodeListSize</span> episodes
+<ol>
+<li>Downloads: <span th:text="${#lists.size(episodeDownloads)}">episodeListSize</span> episodes</li>
+<li>Uploaded to S3: <span th:text="${#lists.size(episodesUploadedToS3)}">episodesUploadedToS3</span> episodes</li> 
+</ol>
 
 <h2>Episodes Downloaded </h2>
-  
     <table border=1>
       <tr>
         <th>Podcast Id</th>
         <th>Episode Id</th>
         <th>Episode Name</th>
+        <th>File Size</th>
       </tr>
       <tr th:each="episode : ${episodeDownloads}">
       	 <td th:text="${episode.podcastId}">podcastId</td>
          <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
          <td th:text="${episode.episodeName}">episodeName</td>
+         <td th:text="${episode.fileSizeInKB} ? ${episode.fileSizeInKB} : ' - '" >episodeId</td> 
+      </tr>
+    </table>
+
+<h2>Episodes Uploaded to S3 </h2> 
+    <table border=1>
+      <tr>
+        <th>Podcast Id</th>
+        <th>Episode Id</th>
+        <th>Episode Name</th>
+        <th>File Size</th>
+      </tr>
+      <tr th:each="episode : ${episodesUploadedToS3}">
+      	 <td th:text="${episode.podcastId}">podcastId</td>
+         <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
+         <td th:text="${episode.episodeName}">episodeName</td>
+         <td th:text="${episode.fileSizeInKB} ? ${episode.fileSizeInKB} : ' - '" >episodeId</td> 
       </tr>
     </table>
 

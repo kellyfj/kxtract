@@ -14,7 +14,7 @@ public class Episode {
 	  private Integer episodeId;
 	  private int podcastId;
 	  private String episodeName;
-	  private long filesize_KB;
+	  private Long filesize_KB;
 	  
 	  protected Episode() {}
 
@@ -48,7 +48,7 @@ public class Episode {
 		return episodeName;
 	}
 
-	public long getFilesizeKB() {
+	public Long getFileSizeInKB() {
 		return filesize_KB;
 	}
 
