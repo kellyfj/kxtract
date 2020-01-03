@@ -10,6 +10,7 @@
 <ol>
 <li>Downloads: <span th:text="${#lists.size(episodeDownloads)}">episodeListSize</span> episodes</li>
 <li>Uploaded to S3: <span th:text="${#lists.size(episodesUploadedToS3)}">episodesUploadedToS3</span> episodes</li> 
+<li>Errors: <span th:text="${#lists.size(errorStackTraces)}">errorStackTraces</span> </li> 
 </ol>
 
 <h2>Episodes Downloaded </h2>
@@ -41,6 +42,16 @@
          <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
          <td th:text="${episode.episodeName}">episodeName</td>
          <td th:text="${episode.fileSizeInKB} ? ${episode.fileSizeInKB} : ' - '" >episodeId</td> 
+      </tr>
+    </table>
+    
+<h2>Errors</h2> 
+    <table border=1>
+      <tr>
+        <th>Error Stack Trace</th>
+      </tr>
+      <tr th:each="str : ${errorStackTraces}">
+      	 <td th:text="${str}">stackTrace</td>
       </tr>
     </table>
 

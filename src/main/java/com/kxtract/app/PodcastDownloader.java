@@ -30,11 +30,6 @@ public class PodcastDownloader {
 			URL downloadURL = lastEpisode.getEnclosure().getURL();
 			logger.info("\t Download URL = " + downloadURL);
 			
-			/*
-			String[] segments = downloadURL.getPath().split("/");
-			String filename = segments[segments.length - 1];
-
-			logger.info("\tfilename = " + filename);*/
 			String filename = lastEpisode.getFilename();
 			File f = new File(downloadPathname + filename);
 
