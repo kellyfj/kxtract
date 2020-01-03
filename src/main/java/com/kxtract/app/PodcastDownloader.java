@@ -1,6 +1,7 @@
 package com.kxtract.app;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -10,15 +11,29 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kxtract.podengine.exceptions.InvalidFeedException;
+import com.kxtract.podengine.exceptions.MalformedFeedException;
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.podengine.models.Podcast;
 
 public class PodcastDownloader {
 	private static Logger logger = LoggerFactory.getLogger(PodcastDownloader.class);
 	
-	public static Episode downloadLatestEpisode(String podcastName, String downloadPathname, boolean downloadIfAlreadyExists) {
+	public static String getLatestEpisodeName(String podcastRssUrl) {
 		try {
-			Podcast podcast = new Podcast(new URL(podcastName));
+			Podcast podcast = new Podcast(new URL(podcastRssUrl));
+			List<Episode> episodes = podcast.getEpisodes();
+			Episode lastEpisode = episodes.get(0);
+
+			return lastEpisode.getTitle();
+		} catch (InvalidFeedException | MalformedFeedException | MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static Episode downloadLatestEpisode(String podcastRssUrl, String downloadPathname, boolean downloadIfAlreadyExists) {
+		try {
+			Podcast podcast = new Podcast(new URL(podcastRssUrl));
 
 			List<Episode> episodes = podcast.getEpisodes();
 			logger.info("Podcast (" + podcast.getTitle() + ")");

@@ -9,4 +9,6 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Int
 	  List<Subscription> findByUserId(String userId);
 
 	  Subscription findById(int id);
+	  
+	  List<Subscription> findByPodcastId(int podcastId);	  
 }

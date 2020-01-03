@@ -21,12 +21,14 @@ import com.kxtract.data.PodcastRepository;
 import com.kxtract.data.dao.Podcast;
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.s3.S3Uploader;
+import com.kxtract.transcription.Transcriber;
 
 @Controller
 public class RefreshController {
 	private Logger logger = LoggerFactory.getLogger(RefreshController.class);
 	private static final String DOWNLOAD_PATH = "/tmp/downloads/audio/";
 	private static final String RAW_AUDIO_BUCKET_NAME = "kxtract";
+	private static final String TRANSCRIPTION_BUCKET_NAME = "kxtract-transcriptions";
 
 	@Autowired
 	private PodcastRepository podRepo;
@@ -45,6 +47,19 @@ public class RefreshController {
 		return "clearcache";
 	}
 	
+	/**
+	 * TODO: Refactor the logic in here
+	 * There is also the fact that there is multiple levels of state
+	 *  - RSS Feed State
+	 *  - Audio File Downloaded
+	 *  - Row in Episode table
+	 *  - Audio in S3
+	 *  - Transcription State
+	 * This needs some serious design thinking to reduce the management complexity
+	 *  
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/refresh")
 	public String refreshLatestEpisodes(Model model) {
 		List<com.kxtract.data.dao.Episode> episodesDownloaded = new ArrayList<>();
@@ -76,9 +91,14 @@ public class RefreshController {
 							S3Uploader.uploadFileToS3(RAW_AUDIO_BUCKET_NAME, new File(DOWNLOAD_PATH + episodeFilename));
 							logger.info("File (" + episodeFilename + ") Upload complete!");
 							episodesUploadedToS3.add(newEpisode);
+							
+							//String jobName = Transcriber.launchTranscriptionJob(RAW_AUDIO_BUCKET_NAME, episodeFilename,
+							//	TRANSCRIPTION_BUCKET_NAME);
+							//logger.info("Transcription Job Started --> " + jobName);
 						}
 						episodeRepo.save(newEpisode);
 
+						
 					} else {
 						logger.warn("Episode ( " + ep.getTitle() + ") was already in the database");
 					}

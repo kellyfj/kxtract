@@ -32,7 +32,7 @@ public class Transcriber {
 	private static Logger logger = LoggerFactory.getLogger(Transcriber.class);
 	private static AmazonTranscribe client = AmazonTranscribeClient.builder().withRegion("us-east-1").build();
 	
-	public static String launchTranscriptionJob(String inputBucketName, String fileName) {
+	public static String launchTranscriptionJob(String inputBucketName, String fileName, String outputBucketName) {
 		StartTranscriptionJobRequest request = new StartTranscriptionJobRequest();
 		Media media = new Media();
 
@@ -41,7 +41,7 @@ public class Transcriber {
 		// request.withMedia(media).withMediaSampleRateHertz(8000);
 		request.setMedia(media);
 		request.withLanguageCode(LanguageCode.EnUS);
-		//request.setOutputBucketName(outputBucketName);
+		request.setOutputBucketName(outputBucketName);
 		Settings settings = new Settings();
 		settings.setMaxSpeakerLabels(3); //Without this we can't tell which speaker said what
 		settings.setShowSpeakerLabels(true);

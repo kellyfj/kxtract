@@ -1,6 +1,10 @@
 package com.kxtract.app;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +22,7 @@ import com.kxtract.data.SubscriptionRepository;
 import com.kxtract.data.dao.Episode;
 import com.kxtract.data.dao.Podcast;
 import com.kxtract.data.dao.Subscription;
+import com.kxtract.notifications.NotificationService;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.kxtract" })
@@ -31,7 +36,8 @@ public class AppApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(PodcastRepository podRepo, EpisodeRepository episodeRepo, SubscriptionRepository subsRepo) {
+	public CommandLineRunner demo(PodcastRepository podRepo, EpisodeRepository episodeRepo,
+			SubscriptionRepository subsRepo, NotificationService ns) {
 		return (args) -> {
 
 			// fetch all 
@@ -75,6 +81,21 @@ public class AppApplication {
 				log.info(s.toString());
 			}
 			log.info("");
+			
+			ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+			
+			Runnable task1 = new Runnable() {
+				public void run() {
+					try {
+						ns.performScanAndNotificationTransmission();
+					} catch (Throwable t) {
+						log.error(t.getMessage(), t);
+					}
+				}
+			};
+			
+			//Execute task every hour
+			executorService.scheduleWithFixedDelay(task1, 0, 1, TimeUnit.HOURS);
 		};
 	}
 }

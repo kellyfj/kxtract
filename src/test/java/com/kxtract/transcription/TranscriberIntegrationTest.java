@@ -12,16 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 public class TranscriberIntegrationTest {
 	private static Logger logger = LoggerFactory.getLogger(TranscriberIntegrationTest.class);
 	
 	@Disabled
 	@Test
 	public void testTranscriber() throws MalformedURLException, IOException {		
-		String jobName = Transcriber.launchTranscriptionJob("kxtract", "2231597-on-the-grass-gareth-byres-on-grassroots-and-working-with-parents.mp3");
+		String jobName = Transcriber.launchTranscriptionJob("kxtract", 
+				"2231597-on-the-grass-gareth-byres-on-grassroots-and-working-with-parents.mp3",
+				"kxtract-transcriptions");
 		logger.info("Job created --> " + jobName);
 		String fileURI = Transcriber.waitForTranscriptionJobToComplete(jobName);
 		logger.info("\t File URI = " + fileURI);
