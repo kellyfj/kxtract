@@ -51,5 +51,13 @@ public class PodcastUIController {
 		model.addAttribute("episodeList", episodeList);
 		return "episodes";
 	}
+	
+	/**
+	 * Just to help test the error page
+	 */
+	@GetMapping("/ui/testerror")
+	  public void handleRequest() {
+	      throw new RuntimeException("test exception");
+	  }
 
 }

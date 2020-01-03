@@ -37,6 +37,7 @@ public class RefreshController {
 		List<com.kxtract.data.dao.Episode> episodesUploadedToS3 = new ArrayList<>();
 
 		List<Podcast> podcastList = (List<Podcast>) podRepo.findAll();
+		int podcastCount = 0;
 		for (Podcast p : podcastList) {
 			Episode ep = PodcastDownloader.downloadLatestEpisode(p.getRssURL(), DOWNLOAD_PATH, false);
 			
@@ -66,7 +67,10 @@ public class RefreshController {
 					logger.warn("Episode ( " + ep.getTitle() + ") was already in the database");
 				}
 			}
+			podcastCount++;
+			logger.info("Processed Podcast " + podcastCount + " of " + podcastList.size() + "");
 		}
+		logger.info("COMPLETE!");
 		model.addAttribute("episodeDownloads", episodesDownloaded);
 		model.addAttribute("episodesUploadedToS3", episodesUploadedToS3);
 		return "refresh";
