@@ -1,6 +1,7 @@
 package com.kxtract.controller;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,9 @@ public class RefreshController {
 
 				//Confirm it already isn't in the database
 				if (episodeRepo.findByPodcastIdAndEpisodeName(p.getId(), ep.getTitle()) == null) {
+					URL url =  ep.getEnclosure().getURL();
 					com.kxtract.data.dao.Episode newEpisode = new com.kxtract.data.dao.Episode(p.getId(), ep.getTitle(),
-							null, ep.getFileSizeInKB());
+							null, url.toString(), ep.getFileSizeInKB());
 					
 					episodesDownloaded.add(newEpisode);					
 					logger.info("Checking S3 before upload . . . .");

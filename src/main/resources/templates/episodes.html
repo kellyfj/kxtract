@@ -17,12 +17,14 @@
       	<th>Podcast Id</th>
         <th>Episode Id</th>
         <th>Episode Name</th>
+        <th>Link</th>
         <th>File Size</th>
       </tr>
       <tr th:each="episode : ${episodeList}">
          <td th:text="${episode.podcastId}" >podcastId</td>
          <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
          <td th:text="${episode.episodeName}">episodeName</td>
+         <td><a href="" th:href="${episode.originURL}">Listen / Download</a></td>
          <td th:text="${episode.fileSizeInKB} ? ${episode.fileSizeInKB} : ' - '" >episodeId</td> 
       </tr>
     </table>

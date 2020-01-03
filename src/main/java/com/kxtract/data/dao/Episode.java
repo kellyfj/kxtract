@@ -15,13 +15,15 @@ public class Episode {
 	  private int podcastId;
 	  private String episodeName;
 	  private Long filesize_KB;
+	  private String origin_url;
 	  
 	  protected Episode() {}
 
-	  public Episode(int podcastId, String episodeName, Integer episodeId, Long fileSizeInKB) {
+	  public Episode(int podcastId, String episodeName, Integer episodeId, String originURL, Long fileSizeInKB) {
 		  this.podcastId = podcastId;
 		  this.episodeId = episodeId;
 		  this.episodeName = episodeName;
+		  this.origin_url = originURL;
 		  this.filesize_KB = fileSizeInKB;
 	  }
 	  
@@ -50,6 +52,10 @@ public class Episode {
 
 	public Long getFileSizeInKB() {
 		return filesize_KB;
+	}
+	
+	public String getOriginURL() {
+		return origin_url;
 	}
 
 }

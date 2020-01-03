@@ -30,17 +30,21 @@ public class Episode {
             this.enclosureElement = enclosureElement;
         }
 
-        public URL getURL() throws MalformedFeedException, MalformedURLException {
+        public URL getURL() {
             if (this.url != null) {
                 return this.url;
             }
 
             Attribute urlAttribute = this.enclosureElement.attribute("url");
             if (urlAttribute == null) {
-                throw new MalformedFeedException("Missing required URL attribute for element Enclosure.");
+                throw new RuntimeException("Missing required URL attribute for element Enclosure.");
             }
 
-            return this.url = new URL(urlAttribute.getValue());
+            try {
+				return this.url = new URL(urlAttribute.getValue());
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
         }
 
         public Long getLength() throws MalformedFeedException {

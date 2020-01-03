@@ -1,6 +1,7 @@
 package com.kxtract.s3;
 
 import java.io.File;
+import java.net.URL;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
@@ -19,7 +20,7 @@ public class S3Uploader {
         }
     }
 	
-	public static void uploadFileToS3(String bucketName, File f) {
+	public static URL uploadFileToS3(String bucketName, File f) {
 		if (bucketName == null) {
 			throw new IllegalArgumentException("bucketName cannot be null");
 		}
@@ -29,11 +30,15 @@ public class S3Uploader {
 		if (!f.exists()) {
 			throw new IllegalArgumentException("File (" + f.getAbsolutePath() + ") does not exist");
 		}
-		AmazonS3 s3 =  AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();   
-		PutObjectRequest p = new PutObjectRequest(bucketName, f.getName(), f);
+		AmazonS3 s3 =  AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();  
+		String key = f.getName();
+		PutObjectRequest p = new PutObjectRequest(bucketName, key, f);
 		
 		// Put Object
 		s3.putObject(p);
+		
+		URL url = s3.getUrl(bucketName, key);
+		return url;
 	}
 	
 	public static String getS3Filename(String bucketName, String filename) {
