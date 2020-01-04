@@ -37,8 +37,9 @@ public class EventChecker {
 			//Is that episode in our database already
 			Episode found = episodeRepo.findByPodcastIdAndEpisodeName(p.getId(), episodeName);
 			if(found != null) {
-				logger.info("Episode ("+ episodeName + " is already in the database");
+				logger.info("Episode ("+ episodeName + ") is already in the database");
 			} else {
+				logger.info("Episode ("+ episodeName + ") was not found in the database");
 				podcastsWithNewEpisodes.add(p);
 			}
 		}

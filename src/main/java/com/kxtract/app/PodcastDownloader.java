@@ -32,6 +32,8 @@ public class PodcastDownloader {
 	}
 	
 	public static Episode downloadLatestEpisode(String podcastRssUrl, String downloadPathname, boolean downloadIfAlreadyExists) {
+		int CONNECTION_TIMEOUT_MS = 5000;
+		int READ_TIMEOUT_MS = 15000;
 		try {
 			Podcast podcast = new Podcast(new URL(podcastRssUrl));
 
@@ -53,7 +55,7 @@ public class PodcastDownloader {
 				return null;
 			} else {
 				logger.info("Creating file " + f.getAbsolutePath() + " . . . .");
-				FileUtils.copyURLToFile(downloadURL, f);
+				FileUtils.copyURLToFile(downloadURL, f, CONNECTION_TIMEOUT_MS, READ_TIMEOUT_MS);
 				logger.info("File download Completed! File size is " + f.length()/1024 + "kb");
 				lastEpisode.setFileSizeInKB(f.length()/1024);
 				return lastEpisode;

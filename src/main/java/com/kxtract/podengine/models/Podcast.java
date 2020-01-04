@@ -6,6 +6,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kxtract.podengine.exceptions.DateFormatException;
 import com.kxtract.podengine.exceptions.InvalidFeedException;
@@ -17,6 +19,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -24,7 +27,8 @@ import java.util.*;
  *
  */
 public class Podcast {
-
+	private static Logger logger = LoggerFactory.getLogger(Podcast.class);
+	
     private String xmlData;
     private Document document;
     private URL feedURL;
@@ -60,7 +64,8 @@ public class Podcast {
             bomInputStream = new BOMInputStream(is, false);
 
             this.feedURL = feed;
-            this.xmlData = IOUtils.toString(bomInputStream);
+            //this.xmlData = IOUtils.toString(bomInputStream, StandardCharsets.US_ASCII);
+            this.xmlData = IOUtils.toString(bomInputStream, StandardCharsets.UTF_8);
             this.document = DocumentHelper.parseText(xmlData);
             this.rootElement = this.document.getRootElement();
             this.channelElement = this.rootElement.element("channel");
