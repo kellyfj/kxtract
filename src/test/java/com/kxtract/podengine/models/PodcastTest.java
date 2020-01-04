@@ -1,5 +1,6 @@
 package com.kxtract.podengine.models;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -8,14 +9,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.kxtract.podengine.exceptions.DateFormatException;
 import com.kxtract.podengine.exceptions.MalformedFeedException;
+import com.kxtract.podengine.utils.DateUtils;
 
 public class PodcastTest {
 
@@ -34,7 +42,6 @@ public class PodcastTest {
 		assertThrows(MalformedFeedException.class,
 	            ()->{new Podcast(xml);} );
 	}
-
 	
 	@Test
 	public void testCtor_SampleXML() throws MalformedFeedException {
@@ -133,7 +140,6 @@ public class PodcastTest {
 	//Sample XML from https://www.w3schools.com/xml/xml_rss.asp
 	private static final String EXAMPLE_RSS_XML_SIMPLE = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" + 
 			"<rss version=\"2.0\">\n" + 
-			"\n" + 
 			"<channel>\n" + 
 			"  <title>W3Schools Home Page</title>\n" + 
 			"  <link>https://www.w3schools.com</link>\n" + 
@@ -148,12 +154,11 @@ public class PodcastTest {
 			"    <link>https://www.w3schools.com/xml</link>\n" + 
 			"    <description>New XML tutorial on W3Schools</description>\n" + 
 			"  </item>\n" + 
-			"</channel>\n" + 
-			"\n" + 
+			"</channel>\n" +  
 			"</rss>";
 	
 	//Sample XML from here https://www.feedforall.com/sample.xml with a few tweaks for XML correctness (around font/<i> tag order)
-	private static final String EXAMPLE_RSS_XML_COMPLEX = "<rss version=\"2.0\">\n" + 
+	public static final String EXAMPLE_RSS_XML_COMPLEX = "<rss version=\"2.0\">\n" + 
 			"<channel>\n" + 
 			"<title>FeedForAll Sample Feed</title>\n" + 
 			"<description>\n" + 
@@ -289,4 +294,128 @@ public class PodcastTest {
 			"</item>\n" + 
 			"</channel>\n" + 
 			"</rss>";
+	
+	public static final String ITUNES_RSS_XML = 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+			"<rss xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\" version=\"2.0\">" + 
+			"<channel>" + 
+			"<title>Title of Podcast</title>" + 
+			"<link>http://www.example.com/</link>" + 
+			"<language>en-us</language>" + 
+			"<itunes:subtitle>Subtitle of podcast</itunes:subtitle>" + 
+			"<itunes:author>Author Name</itunes:author>" + 
+			"<itunes:summary>Description of podcast.</itunes:summary>" + 
+			"<description>Description of podcast.</description>" + 
+			"<itunes:owner>" + 
+			"    <itunes:name>Owner Name</itunes:name>" + 
+			"    <itunes:email>me@example.com</itunes:email>" + 
+			"</itunes:owner>" + 
+			"<itunes:explicit>no</itunes:explicit>" + 
+			"<itunes:image href=\"http://www.example.com/podcast-icon.jpg\" />" + 
+			"<itunes:category text=\"Category Name\"></itunes:category>" + 
+			"<item>" + 
+			"    <title>Title of Podcast Episode</title>" + 
+			"    <itunes:summary>Description of podcast episode content</itunes:summary>" + 
+			"    <description>Description of podcast episode content</description>" + 
+			"    <link>http://example.com/podcast-1</link>" + 
+			"    <enclosure url=\"http://example.com/podcast-1/podcast.mp3\" type=\"audio/mpeg\" length=\"1024\"></enclosure>" + 
+			"    <pubDate>Thu, 21 Dec 2016 16:01:07 +0000</pubDate>" + 
+			"    <itunes:author>Author Name</itunes:author>" + 
+			"    <itunes:duration>00:32:16</itunes:duration>" + 
+			"    <itunes:explicit>no</itunes:explicit>" + 
+			"    <guid>http://example.com/podcast-1</guid>" + 
+			"</item> " +  
+			"</channel>" + 
+			"</rss>";
+	
+	@Test
+	public void testITunes() throws MalformedFeedException, MalformedURLException, DateFormatException {
+		Podcast p = new Podcast(ITUNES_RSS_XML);
+		String[] categories = p.getCategories();
+		for(String c : categories) {
+			assertNotNull(c);
+		}
+	}
+
+	private static Podcast podcast;
+
+    @BeforeAll
+    public static void setup() throws Exception {
+    	String source = Files.readString(
+    		    Paths.get(PodcastTest.class.getResource("/testfeed.rss").toURI()), Charset.defaultCharset());
+        podcast = new Podcast(source);
+    }
+
+    @Test
+    public void testOverview() throws MalformedFeedException, MalformedURLException, DateFormatException {
+        assertEquals("Testing Feed", podcast.getTitle());
+        assertEquals("A dummy podcast feed for testing the Podcast Feed Library.", podcast.getDescription());
+        assertEquals("https://podcast-feed-library.owl.im/feed", podcast.getLink().toString());
+        assertEquals("en-GB", podcast.getLanguage());
+        assertEquals("Copyright © 2017 Icosillion", podcast.getCopyright());
+        assertEquals("Marcus Lewis (marcus@icosillion.com)", podcast.getManagingEditor());
+        assertEquals("Marcus Lewis (marcus@icosillion.com)", podcast.getWebMaster());
+        assertEquals("Mon, 12 Dec 2016 15:30:00 GMT", podcast.getPubDateString());
+        assertEquals(DateUtils.stringToDate("Mon, 12 Dec 2016 15:30:00 GMT"), podcast.getPubDate());
+        assertEquals(DateUtils.stringToDate("Mon, 12 Dec 2016 15:30:00 GMT"), podcast.getLastBuildDate());
+        assertEquals("Mon, 12 Dec 2016 15:30:00 GMT", podcast.getLastBuildDateString());
+        assertArrayEquals(new String[] { "Technology" }, podcast.getCategories());
+        assertEquals("Handcrafted", podcast.getGenerator());
+        assertEquals("https://podcast-feed-library.owl.im/docs", podcast.getDocs().toString());
+        assertEquals(60, (int) podcast.getTTL());
+        assertEquals("https://podcast-feed-library.owl.im/images/artwork.png", podcast.getImageURL().toString());
+        assertNull(podcast.getPICSRating());
+
+        Set<Integer> skipHours = podcast.getSkipHours();
+        assertTrue(skipHours.contains(0));
+        assertTrue(skipHours.contains(4));
+        assertTrue(skipHours.contains(8));
+        assertTrue(skipHours.contains(12));
+        assertTrue(skipHours.contains(16));
+
+        Set<String> skipDays = podcast.getSkipDays();
+        assertTrue(skipDays.contains("Monday"));
+        assertTrue(skipDays.contains("Wednesday"));
+        assertTrue(skipDays.contains("Friday"));
+        assertArrayEquals(new String[] { "podcast", "java", "xml", "dom4j", "icosillion", "maven" } , podcast.getKeywords());
+        assertEquals(1, podcast.getEpisodes().size());
+    }
+
+    @Test
+    public void testTextInput() throws MalformedURLException {
+        TextInputInfo textInput = podcast.getTextInput();
+        assertEquals("Feedback", textInput.getTitle());
+        assertEquals("Feedback for the Testing Feed", textInput.getDescription());
+        assertEquals("feedback", textInput.getName());
+        assertEquals("https://podcast-feed-library.owl.im/feedback/submit", textInput.getLink().toString());
+    }
+
+    @Test
+    public void testITunesInfo() throws Exception {
+        ITunesChannelInfo iTunesInfo = podcast.getITunesInfo();
+        assertEquals("Icosillion", iTunesInfo.getAuthor());
+        assertEquals("A dummy podcast feed for testing the Podcast Feed Library.", iTunesInfo.getSubtitle());
+        assertEquals("This podcast brings testing capabilities to the Podcast Feed Library", iTunesInfo.getSummary());
+        assertEquals(false, iTunesInfo.isBlocked());
+        assertEquals(ITunesInfo.ExplicitLevel.CLEAN, iTunesInfo.getExplicit());
+        assertEquals("https://podcast-feed-library.owl.im/images/artwork.png", iTunesInfo.getImage().toString());
+        assertEquals(ITunesChannelInfo.FeedType.SERIAL, iTunesInfo.getType());
+    }
+
+    @Test
+    public void testITunesOwnerInfo() {
+        ITunesOwner iTunesOwner = podcast.getITunesInfo().getOwner();
+        assertEquals("Icosillion", iTunesOwner.getName());
+        assertEquals("hello@icosillion.com", iTunesOwner.getEmail());
+    }
+
+    @Test
+    public void testCloudInfo() {
+        CloudInfo cloudInfo = podcast.getCloud();
+        assertEquals("rpc.owl.im", cloudInfo.getDomain());
+        assertEquals(8080, (int) cloudInfo.getPort());
+        assertEquals("/rpc", cloudInfo.getPath());
+        assertEquals("owl.register", cloudInfo.getRegisterProcedure());
+        assertEquals("xml-rpc", cloudInfo.getProtocol());
+    }
 }

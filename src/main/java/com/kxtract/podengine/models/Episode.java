@@ -277,9 +277,11 @@ public class Episode {
     }
     
     public String getFilename() {
-		URL downloadURL;
+		if(this.getEnclosure() == null) {
+			return null;
+		}
 		try {
-			downloadURL = this.getEnclosure().getURL();
+			URL downloadURL = this.getEnclosure().getURL();
 			logger.info("\t Download URL = " + downloadURL);
 
 			String[] segments = downloadURL.getPath().split("/");
