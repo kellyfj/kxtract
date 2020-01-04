@@ -28,4 +28,14 @@ public class PodcastDownloaderTest {
 			}
 		}
 	}
+	
+	@Test
+	public void testDownloadOneEpisode() throws UnsupportedEncodingException, IOException {
+		InputStream stream = this.getClass().getResourceAsStream("/podcasts.txt");
+
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))) {
+			String rss = br.readLine();
+			PodcastDownloader.downloadLatestEpisode(rss, "/tmp/test", true);
+		}
+	}
 }
