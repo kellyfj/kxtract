@@ -2,6 +2,7 @@ package com.kxtract.controller;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +31,7 @@ public class RefreshControllerTest {
 	@MockBean
 	private EpisodeRepository episodeRepo;
 
+	@Disabled
 	@Test
 	public void testClearCache() throws Exception {
 		MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.get("/clearcache"))
