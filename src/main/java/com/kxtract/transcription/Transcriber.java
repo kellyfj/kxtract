@@ -42,7 +42,8 @@ public class Transcriber {
 		// request.withMedia(media).withMediaSampleRateHertz(8000);
 		request.setMedia(media);
 		request.withLanguageCode(LanguageCode.EnUS);
-		request.setOutputBucketName(outputBucketName);
+		//request.setOutputBucketName(outputBucketName);
+
 		Settings settings = new Settings();
 		settings.setMaxSpeakerLabels(3); //Without this we can't tell which speaker said what
 		settings.setShowSpeakerLabels(true);

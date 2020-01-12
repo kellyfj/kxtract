@@ -7,14 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -339,10 +342,21 @@ public class PodcastTest {
 
     @BeforeAll
     public static void setup() throws Exception {
-    	String source = Files.readString(
-    		    Paths.get(PodcastTest.class.getResource("/testfeed.rss").toURI()), Charset.defaultCharset());
+    	String source = readLineByLineJava8("/testfeed.rss");
         podcast = new Podcast(source);
     }
+    
+	private static String readLineByLineJava8(String classpath) {
+		StringBuilder contentBuilder = new StringBuilder();
+		try (Stream<String> stream = Files.lines(Paths.get(PodcastTest.class.getResource(classpath).toURI()),
+				StandardCharsets.UTF_8)) {
+			stream.forEach(s -> contentBuilder.append(s).append("\n"));
+		} catch (IOException | URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+
+		return contentBuilder.toString();
+	}
 
     @Test
     public void testOverview() throws MalformedFeedException, MalformedURLException, DateFormatException {

@@ -69,6 +69,10 @@ public class Episode {
 		return s3_url;
 	}
 	
+	public boolean isCanBeTranscribed() {
+		return processingStatus.equals(ProcessingStatus.DOWNLOADED);
+	}
+	
 	public void setProcessingStatus(ProcessingStatus status) {
 		this.processingStatus = status;
 	}
