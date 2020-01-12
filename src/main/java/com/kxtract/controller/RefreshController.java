@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.kxtract.app.PodcastDownloader;
 import com.kxtract.data.EpisodeRepository;
 import com.kxtract.data.PodcastRepository;
+import com.kxtract.data.dao.Episode.ProcessingStatus;
 import com.kxtract.data.dao.Podcast;
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.s3.S3Uploader;
@@ -98,6 +99,7 @@ public class RefreshController {
 							//	TRANSCRIPTION_BUCKET_NAME);
 							//logger.info("Transcription Job Started --> " + jobName);
 						}
+						newEpisode.setProcessingStatus(ProcessingStatus.DOWNLOADED);
 						newEpisode.setS3URL(s3URL.toString());
 						episodeRepo.save(newEpisode);
 						

@@ -17,6 +17,7 @@ public class Episode {
 	  private Long filesize_KB;
 	  private String origin_url;
 	  private String s3_url;
+	  private ProcessingStatus processingStatus;
 	  
 	  protected Episode() {}
 
@@ -67,4 +68,21 @@ public class Episode {
 	public String getS3URL() {
 		return s3_url;
 	}
+	
+	public void setProcessingStatus(ProcessingStatus status) {
+		this.processingStatus = status;
+	}
+	
+	public ProcessingStatus getProcessingStatus() {
+		return processingStatus;
+	}
+	
+	public enum ProcessingStatus {
+		DOWNLOADED,
+		TRANSCRIPTION_STARTED,
+		TRANSCRIPTION_COMPLETE,
+		ERROR
+	}
 }
+
+
