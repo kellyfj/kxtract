@@ -32,12 +32,13 @@ public class Transcriber {
 	private static Logger logger = LoggerFactory.getLogger(Transcriber.class);
 	private static AmazonTranscribe client = AmazonTranscribeClient.builder().withRegion("us-east-1").build();
 	
-	public static String launchTranscriptionJob(String inputBucketName, String fileName, String outputBucketName) {
+	public static String launchTranscriptionJob(String s3URL, String outputBucketName) {
 		StartTranscriptionJobRequest request = new StartTranscriptionJobRequest();
 		Media media = new Media();
 
-		media.setMediaFileUri(S3Uploader.getS3Filename(inputBucketName, fileName));
-
+		//media.setMediaFileUri(S3Uploader.getS3Filename(inputBucketName, fileName));
+		media.setMediaFileUri(s3URL);
+		
 		// request.withMedia(media).withMediaSampleRateHertz(8000);
 		request.setMedia(media);
 		request.withLanguageCode(LanguageCode.EnUS);
@@ -47,15 +48,15 @@ public class Transcriber {
 		settings.setShowSpeakerLabels(true);
 		request.setSettings(settings);
 		
-		String transcriptionJobName = "myJob-" + fileName + "-" + System.currentTimeMillis(); // consider a unique name
+		String transcriptionJobName = "myJob-" + System.currentTimeMillis(); // consider a unique name
 																								// as an id.
 		request.setTranscriptionJobName(transcriptionJobName);
-		if (fileName.endsWith(".mp3")) {
+		if (s3URL.contains(".mp3")) {
 			request.withMediaFormat(MediaFormat.Mp3);
-		} else if (fileName.endsWith(".m4a")) {
+		} else if (s3URL.contains(".m4a")) {
 			request.withMediaFormat(MediaFormat.Mp4);
 		} else
-			throw new IllegalArgumentException("File Type unknown based on Filename ( " + fileName + ")");
+			throw new IllegalArgumentException("File Type unknown based on Filename ( " + s3URL + ")");
 		
 		client.startTranscriptionJob(request);
 		return transcriptionJobName;

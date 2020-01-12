@@ -52,6 +52,7 @@ public class DownloaderMain {
 					//Create Transcript
 					//@TODO if transcription already downloaded then skip
 					//@TODO if transcription already performed but NOT downloaded then ????
+					/*
 					String jobName = Transcriber.launchTranscriptionJob(AUDIO_BUCKET_NAME, episodeFilename,
 							TRANSCRIPTION_BUCKET_NAME);
 					String downloadUri = Transcriber.waitForTranscriptionJobToComplete(jobName);
@@ -62,6 +63,7 @@ public class DownloaderMain {
 					FileUtils.copyURLToFile(new URL(downloadUri), targetFile);
 					StringBuilder sb = Transcriber.simplifyTranscription(targetFile.getAbsolutePath());
 					Transcriber.writeStringToFile(sb, "/tmp/postprocessing/text_transcript_"+filePathParts[0]+"_simplified.txt");
+					*/
 				}
 			}
 			

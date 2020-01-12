@@ -28,8 +28,7 @@ import com.kxtract.transcription.Transcriber;
 public class RefreshController {
 	private Logger logger = LoggerFactory.getLogger(RefreshController.class);
 	private static final String DOWNLOAD_PATH = "/tmp/downloads/audio/";
-	private static final String RAW_AUDIO_BUCKET_NAME = "kxtract";
-	private static final String TRANSCRIPTION_BUCKET_NAME = "kxtract-transcriptions";
+	public static final String RAW_AUDIO_BUCKET_NAME = "kxtract";
 
 	@Autowired
 	private PodcastRepository podRepo;
@@ -101,8 +100,7 @@ public class RefreshController {
 						}
 						newEpisode.setProcessingStatus(ProcessingStatus.DOWNLOADED);
 						newEpisode.setS3URL(s3URL.toString());
-						episodeRepo.save(newEpisode);
-						
+						episodeRepo.save(newEpisode);				
 					} else {
 						logger.warn("Episode ( " + ep.getTitle() + ") was already in the database");
 					}
