@@ -22,7 +22,7 @@
         <th>Origin URL</th>
         <th>File Size</th>
         <th>S3 URL</th>
-        <th>Transcribe</th>
+        <th>Actions</th>
       </tr>
       <tr th:each="episode : ${episodeList}">
          <td th:text="${episode.id}" >Unique ID</td>
@@ -39,7 +39,11 @@
            	 			<button type="submit" name="submit" value="value" class="link-button">Transcribe</button>
         			</form>
          	</div>
-         	<div th:if="${isError} == false"> N/A </div>         
+         	<div th:if="${episode.transcriptionAvailable} == true">
+         	  		<form action="#" method="GET" th:action="@{/ui/podcast/__${episode.podcastId}__/episodes/__${episode.id}__/transcription}">
+           	 			<button type="submit" name="submit" value="value" class="link-button">View Transcription</button>
+        			</form>
+         	</div>       
         </td>     
       </tr>
       

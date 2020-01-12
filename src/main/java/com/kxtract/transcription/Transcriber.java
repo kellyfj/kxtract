@@ -26,7 +26,6 @@ import com.amazonaws.services.transcribe.model.StartTranscriptionJobRequest;
 import com.amazonaws.services.transcribe.model.TranscriptionJob;
 import com.amazonaws.services.transcribe.model.TranscriptionJobStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kxtract.s3.S3Uploader;
 
 public class Transcriber {
 	private static Logger logger = LoggerFactory.getLogger(Transcriber.class);

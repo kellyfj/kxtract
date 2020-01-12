@@ -73,6 +73,10 @@ public class Episode {
 		return processingStatus.equals(ProcessingStatus.DOWNLOADED);
 	}
 	
+	public boolean isTranscriptionAvailable() {
+		return processingStatus.equals(ProcessingStatus.TRANSCRIPTION_COMPLETE);
+	}
+	
 	public void setProcessingStatus(ProcessingStatus status) {
 		this.processingStatus = status;
 	}

@@ -4,15 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.s3.S3Uploader;
-import com.kxtract.transcription.Transcriber;
 
 /**
  * TODO: Remove this class once RefreshController is operational
@@ -22,7 +18,6 @@ public class DownloaderMain {
 	private Logger logger = LoggerFactory.getLogger(DownloaderMain.class);
 	private static final String DOWNLOAD_PATH = "/tmp/downloads/audio/";
 	private static final String AUDIO_BUCKET_NAME = "kxtract";
-	private static final String TRANSCRIPTION_BUCKET_NAME = "kxtract-transcriptions";
 	
 	public static void main(String[] args) {
 		new DownloaderMain();

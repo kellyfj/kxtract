@@ -6,8 +6,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.kxtract.podengine.exceptions.DateFormatException;
 import com.kxtract.podengine.exceptions.InvalidFeedException;
@@ -26,9 +24,7 @@ import java.util.*;
  * Attribution to https://github.com/MarkusLewis/Podcast-Feed-Library
  *
  */
-public class Podcast {
-	private static Logger logger = LoggerFactory.getLogger(Podcast.class);
-	
+public class Podcast {	
     private String xmlData;
     private Document document;
     private URL feedURL;

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.kxtract.data.EpisodeRepository;
 import com.kxtract.data.PodcastRepository;
+import com.kxtract.data.TranscriptionRepository;
 import com.kxtract.data.dao.Episode;
 import com.kxtract.data.dao.Podcast;
+import com.kxtract.data.dao.Transcription;
 
 @Controller
 public class PodcastUIController {
@@ -21,6 +23,9 @@ public class PodcastUIController {
 	
 	@Autowired
 	private EpisodeRepository episodeRepo;
+	
+	@Autowired
+	private TranscriptionRepository transcriptionRepo;
 	
 	@GetMapping("/")
 	public String index(Model model) {
@@ -50,6 +55,19 @@ public class PodcastUIController {
 		model.addAttribute("podcastId", p.getName());
 		model.addAttribute("episodeList", episodeList);
 		return "episodes";
+	}
+	
+	@GetMapping("/ui/podcast/{podcastId}/episodes/{episodeId}/transcription")
+	public String transcription(@PathVariable int podcastId, @PathVariable int episodeId, Model model) {
+		Transcription t = transcriptionRepo.findByEpisodeId(episodeId);
+		Podcast p = podRepo.findById(podcastId);
+		Episode e = episodeRepo.findById(episodeId);
+		
+		model.addAttribute("podcastName", p.getName());
+		model.addAttribute("episodeName", e.getEpisodeName());
+		
+		model.addAttribute("transcription", t);
+		return "transcriptions";
 	}
 	
 	/**

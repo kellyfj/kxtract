@@ -22,7 +22,6 @@ import com.kxtract.data.dao.Episode.ProcessingStatus;
 import com.kxtract.data.dao.Podcast;
 import com.kxtract.podengine.models.Episode;
 import com.kxtract.s3.S3Uploader;
-import com.kxtract.transcription.Transcriber;
 
 @Controller
 public class RefreshController {
