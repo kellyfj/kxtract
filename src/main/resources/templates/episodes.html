@@ -17,15 +17,17 @@
       	<th>Podcast Id</th>
         <th>Episode Id</th>
         <th>Episode Name</th>
-        <th>Link</th>
+        <th>Origin URL</th>
         <th>File Size</th>
+        <th>S3 URL</th>
       </tr>
       <tr th:each="episode : ${episodeList}">
          <td th:text="${episode.podcastId}" >podcastId</td>
          <td th:text="${episode.episodeId} ? ${episode.episodeId} : ' - '" >episodeId</td>
          <td th:text="${episode.episodeName}">episodeName</td>
-         <td><a href="" th:href="${episode.originURL}">Listen / Download</a></td>
-         <td th:text="${episode.fileSizeInKB} ? ${episode.fileSizeInKB} : ' - '" >episodeId</td> 
+         <td><a href="" th:href="${episode.originURL}">Origin URL</a></td>
+         <td th:text="${episode.fileSizeInKB} ? ${episode.fileSizeInKB} : ' - '" >fileSize</td> 
+         <td th:text="${episode.s3URL}" >s3URL</td> 
       </tr>
     </table>
   

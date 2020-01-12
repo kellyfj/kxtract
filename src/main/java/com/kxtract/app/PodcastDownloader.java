@@ -54,7 +54,7 @@ public class PodcastDownloader {
 				logger.info("File already exists locally . . . Skipping download");
 				return null;
 			} else {
-				logger.info("Creating file " + f.getAbsolutePath() + " . . . .");
+				logger.info("Downloading file " + f.getAbsolutePath() + " . . . .");
 				FileUtils.copyURLToFile(downloadURL, f, CONNECTION_TIMEOUT_MS, READ_TIMEOUT_MS);
 				logger.info("File download Completed! File size is " + f.length()/1024 + "kb");
 				lastEpisode.setFileSizeInKB(f.length()/1024);

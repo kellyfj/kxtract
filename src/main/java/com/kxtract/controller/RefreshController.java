@@ -77,18 +77,20 @@ public class RefreshController {
 
 					// Confirm it already isn't in the database
 					if (episodeRepo.findByPodcastIdAndEpisodeName(p.getId(), ep.getTitle()) == null) {
-						URL url = ep.getEnclosure().getURL();
+						URL originURL = ep.getEnclosure().getURL();
 						com.kxtract.data.dao.Episode newEpisode = new com.kxtract.data.dao.Episode(p.getId(),
-								ep.getTitle(), null, url.toString(), ep.getFileSizeInKB());
+								ep.getTitle(), null, originURL.toString(), null, ep.getFileSizeInKB());
 
 						episodesDownloaded.add(newEpisode);
 						logger.info("Checking S3 before upload . . . .");
 						String episodeFilename = ep.getFilename();
+						URL s3URL = null;
 						if (S3Uploader.fileAlreadyExistsInS3(RAW_AUDIO_BUCKET_NAME, episodeFilename)) {
 							logger.warn("File (" + episodeFilename + ") already exists in S3 . . .");
+							s3URL = S3Uploader.getObjectURL(RAW_AUDIO_BUCKET_NAME, episodeFilename);
 						} else {
 							logger.info("Uploading File (" + episodeFilename + ") to S3 . . . ");
-							S3Uploader.uploadFileToS3(RAW_AUDIO_BUCKET_NAME, new File(DOWNLOAD_PATH + episodeFilename));
+							s3URL = S3Uploader.uploadFileToS3(RAW_AUDIO_BUCKET_NAME, new File(DOWNLOAD_PATH + episodeFilename));
 							logger.info("File (" + episodeFilename + ") Upload complete!");
 							episodesUploadedToS3.add(newEpisode);
 							
@@ -96,8 +98,8 @@ public class RefreshController {
 							//	TRANSCRIPTION_BUCKET_NAME);
 							//logger.info("Transcription Job Started --> " + jobName);
 						}
+						newEpisode.setS3URL(s3URL.toString());
 						episodeRepo.save(newEpisode);
-
 						
 					} else {
 						logger.warn("Episode ( " + ep.getTitle() + ") was already in the database");

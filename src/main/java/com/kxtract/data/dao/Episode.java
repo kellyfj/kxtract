@@ -16,14 +16,16 @@ public class Episode {
 	  private String episodeName;
 	  private Long filesize_KB;
 	  private String origin_url;
+	  private String s3_url;
 	  
 	  protected Episode() {}
 
-	  public Episode(int podcastId, String episodeName, Integer episodeId, String originURL, Long fileSizeInKB) {
+	  public Episode(int podcastId, String episodeName, Integer episodeId, String originURL, String s3URL, Long fileSizeInKB) {
 		  this.podcastId = podcastId;
 		  this.episodeId = episodeId;
 		  this.episodeName = episodeName;
 		  this.origin_url = originURL;
+		  this.s3_url = s3URL;
 		  this.filesize_KB = fileSizeInKB;
 	  }
 	  
@@ -58,4 +60,11 @@ public class Episode {
 		return origin_url;
 	}
 
+	public void setS3URL(String url) {
+		s3_url = url;
+	}
+	
+	public String getS3URL() {
+		return s3_url;
+	}
 }

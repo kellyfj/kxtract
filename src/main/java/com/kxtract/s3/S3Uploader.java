@@ -20,6 +20,16 @@ public class S3Uploader {
         }
     }
 	
+	public static URL getObjectURL(String bucketName, String fileName) {
+        AmazonS3 s3 =  AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();      
+        try {
+            URL u = s3.getUrl(bucketName, fileName);
+            return u;      
+        } catch (Exception e) {
+        	throw new RuntimeException(e);
+        }
+    }
+	
 	public static URL uploadFileToS3(String bucketName, File f) {
 		if (bucketName == null) {
 			throw new IllegalArgumentException("bucketName cannot be null");
