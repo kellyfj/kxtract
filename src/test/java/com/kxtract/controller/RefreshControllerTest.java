@@ -8,18 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.kxtract.app.WebSecurityConfig;
 import com.kxtract.data.EpisodeRepository;
 import com.kxtract.data.PodcastRepository;
 
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = { RefreshController.class })
-@WebMvcTest
+@WebMvcTest(includeFilters = @Filter(classes = EnableWebSecurity.class))
+@Import(WebSecurityConfig.class)
 public class RefreshControllerTest {
 
 	@Autowired

@@ -30,9 +30,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+       	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
         implementation 'org.dom4j:dom4j:2.0.2'
         implementation 'commons-io:commons-io:2.5'
         implementation 'org.apache.commons:commons-lang3:3.9'
@@ -88,6 +91,7 @@ flyway {
 spotbugs {
   ignoreFailures = true
 }
+// For Spotbugs support in Gradle 6 do the following
 // work around inability to import this in an external script
 ext {
     SpotBugsTask = com.github.spotbugs.SpotBugsTask
@@ -97,5 +101,4 @@ tasks.withType(SpotBugsTask) {
         xml.enabled = false
         html.enabled = true
     }
-
 }
