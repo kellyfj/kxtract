@@ -11,6 +11,8 @@ plugins {
         id 'eclipse'
         id 'jacoco'
         id "org.flywaydb.flyway" version "6.1.2"
+        id "org.owasp.dependencycheck" version "5.3.0"
+        id "com.github.spotbugs" version "3.0.0"
 }
 
 group = 'com.kxtract'
@@ -81,4 +83,19 @@ jacocoTestCoverageVerification {
 flyway {
 //all properties e.g. url, login, password in gradle.properties
 // See https://flywaydb.org/documentation/gradle/#tasks for more details
+}
+
+spotbugs {
+  ignoreFailures = true
+}
+// work around inability to import this in an external script
+ext {
+    SpotBugsTask = com.github.spotbugs.SpotBugsTask
+}
+tasks.withType(SpotBugsTask) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+
 }

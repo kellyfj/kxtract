@@ -30,3 +30,11 @@ Print the details and statis information
 
 Delete the database contents so we can start-over
 ` ./gradlew flywayClean`
+
+### Code Scans
+OWASP Dependency check
+`./gradlew dependencyCheckAnalyze && open build/reports/dependency-check-report.html` 
+
+
+SpotBugs Code Checks
+`./gradlew clean spotbugsMain && open build/reports/spotbugs/main.html`
