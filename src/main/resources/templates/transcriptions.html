@@ -9,10 +9,10 @@
   </head>
 
   <body>
-    <h1>Transcription List for Podcast: <span th:text="${podcastName}">podcastName</span></h1>
+    <h1>Transcription for Podcast: <span th:text="${podcastName}">podcastName</span></h1>
 	<h2> Episode Name: <span th:text="${episodeName}">episodeName</span> </h2>
 	
-	<span th:text="${transcription.raw_transcription}">rawTranscription</span> 
+	<span th:text="${transcription} ? ${transcription.raw_transcription} : ' - ' ">rawTranscription</span> 
          
   </body>
 

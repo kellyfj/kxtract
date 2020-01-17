@@ -21,8 +21,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		 *  
 		 * https://docs.spring.io/spring-security/site/docs/3.2.0.CI-SNAPSHOT/reference/html/headers.html
 		 */
+		http.headers().contentSecurityPolicy("script-src 'self'");
 		//http.csrf().disable();
-		//http.headers().contentSecurityPolicy("script-src 'self'");
 		//http.headers().frameOptions().sameOrigin();
 
 	}
