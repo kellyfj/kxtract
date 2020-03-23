@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -46,6 +47,7 @@ public class RefreshControllerTest {
 		assertTrue(content.contains("files were deleted"));
 	}
 
+	@WithMockUser(value = "fkelly")
 	@Test
 	public void testRefresh() throws Exception {
 		MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.get("/refresh"))

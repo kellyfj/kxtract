@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kxtract.data.EpisodeRepository;
 import com.kxtract.data.PodcastRepository;
@@ -31,6 +32,19 @@ public class PodcastUIController {
 	public String index(Model model) {
 		return "index";
 	}
+	
+    // Login form  
+    @RequestMapping("/login.html")  
+    public String login() {  
+        return "login.html";  
+    }  
+
+    // Login form with error  
+    @RequestMapping("/login-error.html")  
+    public String loginError(Model model) {  
+        model.addAttribute("loginError", true);  
+        return "login.html";  
+    }  
 	
 	@GetMapping("/ui/podcasts")
 	public String viewpodcasts(Model model) {
