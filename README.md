@@ -12,6 +12,9 @@ Download Podcasts, transcribe them to text, summarize them, store them in a data
 ### Build and run tests
 `$ ./gradlew clean build`
 
+### Run App locally
+`$ ./gradlew bootRun`
+
 ### Run Code coverage
 
 #### Get Report
