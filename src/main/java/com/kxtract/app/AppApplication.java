@@ -59,7 +59,7 @@ public class AppApplication {
 			
 			List<Podcast> deleteTestPodcasts = podRepo.findByName("Test");
 			for(Podcast pod: deleteTestPodcasts) {
-				log.info("Deleteing Podcast " + pod.getId() + " . . . . ");
+				log.info("Deleting Podcast " + pod.getId() + " . . . . ");
 				podRepo.delete(pod);
 			}
 			log.info("");
